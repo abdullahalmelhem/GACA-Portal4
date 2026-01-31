@@ -69,7 +69,7 @@
         </div>
 
         <div class="p-6 relative">
-            <div id="login-view" class="hidden fade-in text-center">
+            <div id="login-view" class="fade-in text-center">
                 <div class="mb-8 mt-4">
                     <div class="w-20 h-20 mx-auto bg-[#0f172a] rounded-full flex items-center justify-center border-2 border-[#334155] shadow-lg mb-4">
                         <svg class="w-10 h-10 text-[#fbbf24]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
@@ -106,7 +106,6 @@
                         <label class="text-[10px] text-[#94a3b8] mr-1">تاريخ الإصدار</label>
                         <input type="date" id="inp-issue-date" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-2 text-xs">
                     </div>
-                    
                     <div class="grid grid-cols-2 gap-2">
                         <input type="number" id="inp-car" placeholder="عدد المركبات" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs focus:border-[#fbbf24] focus:outline-none">
                         <select id="inp-weapon" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs">
@@ -145,11 +144,17 @@
                     <p class="text-[#fbbf24] text-[10px] mb-1">صاحب التصريح</p>
                     <h1 id="view-name" class="text-2xl font-bold text-white leading-tight">...</h1>
                 </div>
-                <div class="grid grid-cols-2 gap-px bg-[#334155]/50 border border-[#334155] rounded-lg overflow-hidden text-right text-[11px]">
-                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">الجهة المستضيفة</span><span id="view-host" class="text-white">...</span></div>
+                <div class="grid grid-cols-2 gap-px bg-[#334155]/50 border border-[#334155] rounded-lg overflow-hidden text-right text-[11px] max-h-[50vh] overflow-y-auto custom-scroll">
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">الجهة المستضيفة</span><span id="view-host" class="text-white font-bold">...</span></div>
                     <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">تاريخ الزيارة</span><span id="view-date" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">وقت الزيارة</span><span id="view-time" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">السبب</span><span id="view-reason" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">المرافقين</span><span id="view-guests" class="text-white">...</span></div>
                     <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">البوابة</span><span id="view-gate" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">المركبات</span><span id="view-car" class="text-white font-bold">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">السلاح</span><span id="view-weapon" class="text-white font-bold">...</span></div>
                     <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">صادر عن</span><span id="view-issuer" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">تاريخ الإصدار</span><span id="view-issue-date" class="text-white">...</span></div>
                 </div>
             </div>
         </div>
@@ -161,7 +166,6 @@
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
             if (params.has('n')) {
-                // التحقق من صلاحية الوقت (24 ساعة)
                 const creationTime = parseInt(params.get('ts'));
                 const currentTime = Date.now();
                 const dayInMs = 24 * 60 * 60 * 1000;
@@ -195,9 +199,15 @@
                 n: n,
                 h: document.getElementById('inp-host').value,
                 d: document.getElementById('inp-date').value,
+                t: document.getElementById('inp-time').value,
+                r: document.getElementById('inp-reason').value,
+                g: document.getElementById('inp-guests').value,
                 gt: document.getElementById('inp-gate').value,
                 is: document.getElementById('inp-issuer').value,
-                ts: Date.now(), // بصمة الوقت للتحقق من الـ 24 ساعة
+                idat: document.getElementById('inp-issue-date').value,
+                car: document.getElementById('inp-car').value,
+                w: document.getElementById('inp-weapon').value,
+                ts: Date.now(),
                 created_at_label: new Date().toLocaleString('ar-SY')
             };
 
@@ -206,7 +216,6 @@
             localStorage.setItem('gaca_history', JSON.stringify(history));
 
             const params = new URLSearchParams();
-            // نمرر البيانات الضرورية فقط في الرابط
             for (const key in data) {
                 if (key !== 'created_at_label') params.append(key, data[key]);
             }
@@ -255,8 +264,14 @@
             document.getElementById('view-name').innerText = params.get('n');
             document.getElementById('view-host').innerText = params.get('h') || '...';
             document.getElementById('view-date').innerText = params.get('d') || '...';
+            document.getElementById('view-time').innerText = params.get('t') || '...';
+            document.getElementById('view-reason').innerText = params.get('r') || '...';
+            document.getElementById('view-guests').innerText = params.get('g') || '0';
             document.getElementById('view-gate').innerText = params.get('gt') || '...';
+            document.getElementById('view-car').innerText = params.get('car') || '0';
+            document.getElementById('view-weapon').innerText = params.get('w') || 'لا يوجد';
             document.getElementById('view-issuer').innerText = params.get('is') || '...';
+            document.getElementById('view-issue-date').innerText = params.get('idat') || '...';
         }
     </script>
 </body>
