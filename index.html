@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>هيئة الطيران المدني - تصريح دخول</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body { 
+            font-family: 'Tajawal', sans-serif; 
+            background: radial-gradient(circle at top right, #1e3a4c, #0f172a 60%);
+            color: #f1f5f9; 
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; transform: translateY(10px); }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+        
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2v-4h4v-2H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        select {
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fbbf24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 0.7rem center;
+            background-size: 1em;
+        }
+        
+        .error-field { border: 2px solid #ef4444 !important; }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #fbbf24; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 relative">
+
+    <div class="bg-overlay"></div>
+
+    <div class="relative w-full max-w-md bg-[#1e293b]/90 backdrop-blur-sm border border-[#334155] rounded-2xl shadow-2xl overflow-hidden z-10">
+        
+        <div class="bg-[#0f172a]/80 p-4 border-b border-[#334155] flex items-center justify-between">
+            <img src="logo.png" onerror="this.style.display='none'" class="w-10 h-10 object-contain drop-shadow-md">
+            
+            <div class="text-center flex-1">
+                <h3 class="text-[#94a3b8] text-[9px] font-bold tracking-wider">الجمهورية العربية السورية</h3>
+                <h1 class="text-white text-xs font-bold">الهيئة العامة للطيران المدني</h1>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button id="history-btn" onclick="showHistoryView()" class="hidden text-[#fbbf24] hover:text-white transition p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </button>
+                <img src="image_ca37e1.png" onerror="this.style.display='none'" class="w-10 h-10 object-contain">
+            </div>
+        </div>
+
+        <div class="p-6 relative">
+            <div id="login-view" class="hidden fade-in text-center">
+                <div class="mb-8 mt-4">
+                    <div class="w-20 h-20 mx-auto bg-[#0f172a] rounded-full flex items-center justify-center border-2 border-[#334155] shadow-lg mb-4">
+                        <svg class="w-10 h-10 text-[#fbbf24]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <h2 class="text-xl font-bold text-white">بوابة التصاريح الأمنية</h2>
+                    <p class="text-[#94a3b8] text-xs mt-1">تسجيل دخول المفوضين</p>
+                </div>
+                <input type="password" id="password-input" placeholder="رمز المرور" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-center mb-4 focus:border-[#fbbf24] focus:outline-none">
+                <button onclick="checkPassword()" class="w-full bg-[#fbbf24] hover:bg-[#d97706] text-[#0f172a] font-bold py-3 rounded-lg shadow-md transition-all">دخول النظام</button>
+                <p id="error-msg" class="text-red-400 text-xs mt-4 hidden font-bold">رمز المرور غير صحيح</p>
+            </div>
+
+            <div id="generator-view" class="hidden fade-in">
+                <h2 class="text-[#fbbf24] font-bold text-lg mb-4 text-center border-b border-[#334155] pb-2">بيانات التصريح</h2>
+                <div class="space-y-3 text-right max-h-[60vh] overflow-y-auto pr-2 custom-scroll">
+                    <input type="text" id="inp-name" placeholder="الاسم الكامل" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs focus:border-[#fbbf24] focus:outline-none">
+                    <input type="text" id="inp-host" placeholder="الجهة المستضيفة" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs focus:border-[#fbbf24] focus:outline-none">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="date" id="inp-date" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-2 text-xs">
+                        <input type="time" id="inp-time" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-2 text-xs">
+                    </div>
+                    <input type="text" id="inp-reason" placeholder="سبب الزيارة" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs focus:border-[#fbbf24] focus:outline-none">
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="inp-guests" placeholder="عدد المرافقين" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs focus:border-[#fbbf24] focus:outline-none">
+                        <select id="inp-gate" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs focus:border-[#fbbf24] focus:outline-none">
+                            <option value="" disabled selected>اختر البوابة</option>
+                            <option value="هيئة الطيران">هيئة الطيران</option>
+                            <option value="VIP">VIP</option>
+                            <option value="70">70</option>
+                        </select>
+                    </div>
+                    <input type="text" id="inp-issuer" placeholder="الجهة المصدرة عن" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs focus:border-[#fbbf24] focus:outline-none">
+                    <div class="space-y-1">
+                        <label class="text-[10px] text-[#94a3b8] mr-1">تاريخ الإصدار</label>
+                        <input type="date" id="inp-issue-date" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-2 text-xs">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="inp-car" placeholder="عدد المركبات" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs focus:border-[#fbbf24] focus:outline-none">
+                        <select id="inp-weapon" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs">
+                            <option value="" selected>لا يوجد سلاح</option>
+                            <option value="يوجد سلاح">يوجد سلاح</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="generateQR()" class="w-full mt-6 bg-[#fbbf24] hover:bg-[#d97706] text-[#0f172a] font-bold py-3 rounded-lg shadow-lg flex items-center justify-center gap-2 transition-all">توليد الرمز (QR)</button>
+                
+                <div id="qr-container" class="mt-6 hidden flex-col items-center bg-white p-4 rounded-lg shadow-inner">
+                    <img id="qr-image" src="" alt="QR Code" class="w-40 h-40 object-contain mix-blend-multiply">
+                    <button onclick="shareQR()" class="mt-3 w-full bg-[#25D366] text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2">
+                        مشاركة الباركود (كصورة)
+                    </button>
+                </div>
+            </div>
+
+            <div id="history-view" class="hidden fade-in">
+                <div class="flex justify-between items-center mb-4 border-b border-[#334155] pb-2">
+                    <button onclick="hideHistoryView()" class="text-[#fbbf24] text-xs font-bold border border-[#fbbf24] px-3 py-1 rounded hover:bg-[#fbbf24] hover:text-[#0f172a] transition">عودة</button>
+                    <h2 class="text-[#fbbf24] font-bold text-lg">سجل الباركودات المصدرة</h2>
+                </div>
+                <div id="history-list" class="space-y-3 max-h-[60vh] overflow-y-auto pr-1 custom-scroll">
+                    <p class="text-center text-[#94a3b8] text-xs py-4">لا يوجد سجلات حالياً</p>
+                </div>
+            </div>
+
+            <div id="verifier-view" class="hidden fade-in text-center">
+                <div class="mb-6 relative inline-block"><div class="bg-[#334155]/30 border border-[#334155] px-6 py-2 rounded-full flex items-center gap-2"><span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span><span class="text-white text-sm font-bold">مسموح بالدخول</span></div></div>
+                <div class="bg-[#0f172a] border-r-4 border-r-[#fbbf24] rounded p-4 mb-4 text-right shadow-md">
+                    <button id="close-verifier-btn" onclick="hideVerifierView()" class="hidden float-left text-[#fbbf24] text-[10px] border border-[#fbbf24] px-2 rounded hover:bg-[#fbbf24] hover:text-[#0f172a]">إغلاق</button>
+                    <p class="text-[#fbbf24] text-[10px] mb-1">صاحب التصريح</p>
+                    <h1 id="view-name" class="text-2xl font-bold text-white leading-tight">...</h1>
+                </div>
+                <div class="grid grid-cols-2 gap-px bg-[#334155]/50 border border-[#334155] rounded-lg overflow-hidden text-right text-[11px] max-h-[45vh] overflow-y-auto">
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">الجهة المستضيفة</span><span id="view-host" class="text-white font-bold">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">تاريخ الزيارة</span><span id="view-date" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">الوقت</span><span id="view-time" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">السبب</span><span id="view-reason" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">المرافقين</span><span id="view-guests" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">البوابة</span><span id="view-gate" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3 col-span-2"><span class="block text-[#94a3b8] text-[9px]">الجهة المصدرة عن</span><span id="view-issuer" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3 col-span-2"><span class="block text-[#94a3b8] text-[9px]">تاريخ الإصدار</span><span id="view-issue-date" class="text-white">...</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let qrImageUrl = "";
+
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('n')) {
+                showVerifier(params);
+            } else {
+                document.getElementById('login-view').classList.remove('hidden');
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('inp-date').value = today;
+                document.getElementById('inp-issue-date').value = today;
+            }
+        };
+
+        function checkPassword() {
+            if (document.getElementById('password-input').value === "125689") { 
+                document.getElementById('login-view').classList.add('hidden');
+                document.getElementById('generator-view').classList.remove('hidden');
+                document.getElementById('history-btn').classList.remove('hidden');
+            } else { document.getElementById('error-msg').classList.remove('hidden'); }
+        }
+
+        function generateQR() {
+            const fields = ['inp-name', 'inp-host', 'inp-date', 'inp-time', 'inp-reason', 'inp-gate', 'inp-issuer', 'inp-issue-date'];
+            let isValid = true;
+
+            fields.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el.value) { el.classList.add('error-field'); isValid = false; }
+                else { el.classList.remove('error-field'); }
+            });
+
+            if (!isValid) { alert('الرجاء تعبئة كافة الحقول المطلوبة'); return; }
+
+            const data = {
+                n: document.getElementById('inp-name').value,
+                h: document.getElementById('inp-host').value,
+                d: document.getElementById('inp-date').value,
+                t: document.getElementById('inp-time').value,
+                r: document.getElementById('inp-reason').value,
+                g: document.getElementById('inp-guests').value,
+                gt: document.getElementById('inp-gate').value,
+                is: document.getElementById('inp-issuer').value,
+                idat: document.getElementById('inp-issue-date').value,
+                car: document.getElementById('inp-car').value,
+                w: document.getElementById('inp-weapon').value,
+                created_at: new Date().toLocaleString('ar-SY')
+            };
+
+            saveToHistory(data); // حفظ في السجل
+
+            const params = new URLSearchParams();
+            for (const key in data) {
+                if (key !== 'created_at') params.append(key, data[key]);
+            }
+            
+            const generatedLink = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+            qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(generatedLink)}`;
+            document.getElementById('qr-image').src = qrImageUrl;
+            document.getElementById('qr-container').classList.replace('hidden', 'flex');
+        }
+
+        function saveToHistory(data) {
+            let history = JSON.parse(localStorage.getItem('gaca_history') || "[]");
+            history.unshift(data); // إضافة في البداية
+            localStorage.setItem('gaca_history', JSON.stringify(history));
+        }
+
+        function showHistoryView() {
+            document.getElementById('generator-view').classList.add('hidden');
+            document.getElementById('history-view').classList.remove('hidden');
+            renderHistoryList();
+        }
+
+        function hideHistoryView() {
+            document.getElementById('history-view').classList.add('hidden');
+            document.getElementById('generator-view').classList.remove('hidden');
+        }
+
+        function renderHistoryList() {
+            const listContainer = document.getElementById('history-list');
+            const history = JSON.parse(localStorage.getItem('gaca_history') || "[]");
+            listContainer.innerHTML = '';
+
+            if (history.length === 0) {
+                listContainer.innerHTML = '<p class="text-center text-[#94a3b8] text-xs py-4">لا يوجد سجلات حالياً</p>';
+                return;
+            }
+
+            history.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-[#0f172a] border border-[#334155] rounded-lg p-3 flex justify-between items-center";
+                card.innerHTML = `
+                    <div class="text-right">
+                        <h4 class="text-white font-bold text-sm">${item.n}</h4>
+                        <p class="text-[#fbbf24] text-[9px] mt-1">تاريخ الإنشاء: ${item.created_at}</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="viewHistoryItem(${index})" class="bg-[#334155] p-2 rounded text-[#fbbf24] hover:bg-[#fbbf24] hover:text-[#0f172a] transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </button>
+                        <button onclick="deleteHistoryItem(${index})" class="bg-[#334155] p-2 rounded text-red-400 hover:bg-red-500 hover:text-white transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2
