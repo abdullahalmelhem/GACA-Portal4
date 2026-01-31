@@ -69,7 +69,7 @@
         </div>
 
         <div class="p-6 relative">
-            <div id="login-view" class="hidden fade-in text-center">
+            <div id="login-view" class="fade-in text-center">
                 <div class="mb-8 mt-4">
                     <div class="w-20 h-20 mx-auto bg-[#0f172a] rounded-full flex items-center justify-center border-2 border-[#334155] shadow-lg mb-4">
                         <svg class="w-10 h-10 text-[#fbbf24]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
@@ -106,11 +106,10 @@
                         <label class="text-[10px] text-[#94a3b8] mr-1">تاريخ الإصدار</label>
                         <input type="date" id="inp-issue-date" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-2 text-xs">
                     </div>
-                    
                     <div class="grid grid-cols-2 gap-2">
                         <input type="number" id="inp-car" placeholder="عدد المركبات" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs focus:border-[#fbbf24] focus:outline-none">
                         <select id="inp-weapon" class="w-full bg-[#0f172a] border border-[#334155] text-white rounded-lg p-3 text-xs">
-                            <option value="" selected>لا يوجد سلاح</option>
+                            <option value="لا يوجد سلاح" selected>لا يوجد سلاح</option>
                             <option value="يوجد سلاح">يوجد سلاح</option>
                         </select>
                     </div>
@@ -119,39 +118,30 @@
                 
                 <div id="qr-container" class="mt-6 hidden flex-col items-center bg-white p-4 rounded-lg shadow-inner">
                     <img id="qr-image" src="" alt="QR Code" class="w-40 h-40 object-contain mix-blend-multiply">
-                    <button onclick="shareQR()" class="mt-3 w-full bg-[#25D366] text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2">
-                        مشاركة الباركود (كصورة)
-                    </button>
+                    <button onclick="shareQR()" class="mt-3 w-full bg-[#25D366] text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2">مشاركة الباركود (كصورة)</button>
                 </div>
             </div>
 
             <div id="history-view" class="hidden fade-in">
                 <div class="flex justify-between items-center mb-4 border-b border-[#334155] pb-2">
-                    <button onclick="hideHistoryView()" class="text-[#fbbf24] text-xs font-bold border border-[#fbbf24] px-3 py-1 rounded hover:bg-[#fbbf24] hover:text-[#0f172a] transition">عودة</button>
-                    <h2 class="text-[#fbbf24] font-bold text-lg">سجل الباركودات المصدرة</h2>
+                    <button onclick="hideHistoryView()" class="text-[#fbbf24] text-xs font-bold border border-[#fbbf24] px-3 py-1 rounded">عودة</button>
+                    <h2 class="text-[#fbbf24] font-bold text-lg">سجل الباركودات</h2>
                 </div>
-                <div id="history-list" class="space-y-3 max-h-[60vh] overflow-y-auto pr-1 custom-scroll">
-                    <p class="text-center text-[#94a3b8] text-xs py-4">لا يوجد سجلات حالياً</p>
-                </div>
+                <div id="history-list" class="space-y-3 max-h-[60vh] overflow-y-auto pr-1"></div>
             </div>
 
             <div id="verifier-view" class="hidden fade-in text-center">
-                <div class="mb-6 relative inline-block"><div class="bg-[#334155]/30 border border-[#334155] px-6 py-2 rounded-full flex items-center gap-2"><span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span><span class="text-white text-sm font-bold">مسموح بالدخول</span></div></div>
+                <div class="mb-6 relative inline-block"><div class="bg-green-500/20 border border-green-500/50 px-6 py-2 rounded-full flex items-center gap-2"><span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span><span class="text-white text-sm font-bold">مسموح بالدخول</span></div></div>
                 <div class="bg-[#0f172a] border-r-4 border-r-[#fbbf24] rounded p-4 mb-4 text-right shadow-md">
-                    <button id="close-verifier-btn" onclick="hideVerifierView()" class="hidden float-left text-[#fbbf24] text-[10px] border border-[#fbbf24] px-2 rounded hover:bg-[#fbbf24] hover:text-[#0f172a]">إغلاق</button>
-                    <p class="text-[#fbbf24] text-[10px] mb-1">صاحب التصريح</p>
                     <h1 id="view-name" class="text-2xl font-bold text-white leading-tight">...</h1>
                 </div>
-                <div class="grid grid-cols-2 gap-px bg-[#334155]/50 border border-[#334155] rounded-lg overflow-hidden text-right text-[11px] max-h-[45vh] overflow-y-auto">
-                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">الجهة المستضيفة</span><span id="view-host" class="text-white font-bold">...</span></div>
+                <div class="grid grid-cols-2 gap-px bg-[#334155]/50 border border-[#334155] rounded-lg overflow-hidden text-right text-[11px]">
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">الجهة المستضيفة</span><span id="view-host" class="text-white">...</span></div>
                     <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">تاريخ الزيارة</span><span id="view-date" class="text-white">...</span></div>
-                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">الوقت</span><span id="view-time" class="text-white">...</span></div>
-                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">السبب</span><span id="view-reason" class="text-white">...</span></div>
-                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">المرافقين</span><span id="view-guests" class="text-white">...</span></div>
                     <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">البوابة</span><span id="view-gate" class="text-white">...</span></div>
-                    <div class="bg-[#0f172a] p-3 col-span-2"><span class="block text-[#94a3b8] text-[9px]">الجهة المصدرة عن</span><span id="view-issuer" class="text-white">...</span></div>
-                    <div class="bg-[#0f172a] p-3 col-span-2"><span class="block text-[#94a3b8] text-[9px]">تاريخ الإصدار</span><span id="view-issue-date" class="text-white">...</span></div>
+                    <div class="bg-[#0f172a] p-3"><span class="block text-[#94a3b8] text-[9px]">صادر عن</span><span id="view-issuer" class="text-white">...</span></div>
                 </div>
+                <button onclick="location.href=location.pathname" class="mt-4 text-[#fbbf24] text-xs underline">العودة للرئيسية</button>
             </div>
         </div>
     </div>
@@ -161,9 +151,17 @@
 
         window.onload = function() {
             const params = new URLSearchParams(window.location.search);
+            // إذا كان الرابط يحتوي على بيانات (مسح باركود)
             if (params.has('n')) {
-                showVerifier(params);
+                document.getElementById('login-view').classList.add('hidden');
+                document.getElementById('verifier-view').classList.remove('hidden');
+                document.getElementById('view-name').innerText = params.get('n');
+                document.getElementById('view-host').innerText = params.get('h') || '...';
+                document.getElementById('view-date').innerText = params.get('d') || '...';
+                document.getElementById('view-gate').innerText = params.get('gt') || '...';
+                document.getElementById('view-issuer').innerText = params.get('is') || '...';
             } else {
+                // الوضع الافتراضي: إظهار شاشة تسجيل الدخول
                 document.getElementById('login-view').classList.remove('hidden');
                 const today = new Date().toISOString().split('T')[0];
                 document.getElementById('inp-date').value = today;
@@ -180,83 +178,55 @@
         }
 
         function generateQR() {
-            const fields = ['inp-name', 'inp-host', 'inp-date', 'inp-time', 'inp-reason', 'inp-gate', 'inp-issuer', 'inp-issue-date'];
-            let isValid = true;
-
-            fields.forEach(id => {
-                const el = document.getElementById(id);
-                if (!el.value) { el.classList.add('error-field'); isValid = false; }
-                else { el.classList.remove('error-field'); }
-            });
-
-            if (!isValid) { alert('الرجاء تعبئة كافة الحقول المطلوبة'); return; }
+            const n = document.getElementById('inp-name').value;
+            if (!n) { alert('الرجاء تعبئة الاسم'); return; }
 
             const data = {
-                n: document.getElementById('inp-name').value,
+                n: n,
                 h: document.getElementById('inp-host').value,
                 d: document.getElementById('inp-date').value,
-                t: document.getElementById('inp-time').value,
-                r: document.getElementById('inp-reason').value,
-                g: document.getElementById('inp-guests').value,
                 gt: document.getElementById('inp-gate').value,
                 is: document.getElementById('inp-issuer').value,
-                idat: document.getElementById('inp-issue-date').value,
-                car: document.getElementById('inp-car').value,
-                w: document.getElementById('inp-weapon').value,
                 created_at: new Date().toLocaleString('ar-SY')
             };
 
-            saveToHistory(data); // حفظ في السجل
+            // حفظ في السجل
+            let history = JSON.parse(localStorage.getItem('gaca_history') || "[]");
+            history.unshift(data);
+            localStorage.setItem('gaca_history', JSON.stringify(history));
 
-            const params = new URLSearchParams();
-            for (const key in data) {
-                if (key !== 'created_at') params.append(key, data[key]);
-            }
+            const params = new URLSearchParams(data);
+            const link = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+            qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(link)}`;
             
-            const generatedLink = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
-            qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(generatedLink)}`;
             document.getElementById('qr-image').src = qrImageUrl;
             document.getElementById('qr-container').classList.replace('hidden', 'flex');
         }
 
-        function saveToHistory(data) {
-            let history = JSON.parse(localStorage.getItem('gaca_history') || "[]");
-            history.unshift(data); // إضافة في البداية
-            localStorage.setItem('gaca_history', JSON.stringify(history));
+        async function shareQR() {
+            const response = await fetch(qrImageUrl);
+            const blob = await response.blob();
+            const file = new File([blob], 'GACA_Pass.png', { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({ files: [file], title: 'تصريح دخول' });
+            } else { alert('تم تحميل الصورة لجهازك'); const a = document.createElement('a'); a.href = qrImageUrl; a.download = 'pass.png'; a.click(); }
         }
 
         function showHistoryView() {
             document.getElementById('generator-view').classList.add('hidden');
             document.getElementById('history-view').classList.remove('hidden');
-            renderHistoryList();
-        }
-
-        function hideHistoryView() {
-            document.getElementById('history-view').classList.add('hidden');
-            document.getElementById('generator-view').classList.remove('hidden');
-        }
-
-        function renderHistoryList() {
-            const listContainer = document.getElementById('history-list');
+            const list = document.getElementById('history-list');
             const history = JSON.parse(localStorage.getItem('gaca_history') || "[]");
-            listContainer.innerHTML = '';
+            list.innerHTML = history.length ? '' : '<p class="text-center text-xs py-4">لا يوجد سجلات</p>';
+            history.forEach(item => {
+                list.innerHTML += `<div class="bg-[#0f172a] p-3 rounded border border-[#334155] text-right">
+                    <div class="font-bold text-white text-sm">${item.n}</div>
+                    <div class="text-[#fbbf24] text-[9px] mt-1">تاريخ الإنشاء: ${item.created_at}</div>
+                </div>`;
+            });
+        }
 
-            if (history.length === 0) {
-                listContainer.innerHTML = '<p class="text-center text-[#94a3b8] text-xs py-4">لا يوجد سجلات حالياً</p>';
-                return;
-            }
-
-            history.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = "bg-[#0f172a] border border-[#334155] rounded-lg p-3 flex justify-between items-center";
-                card.innerHTML = `
-                    <div class="text-right">
-                        <h4 class="text-white font-bold text-sm">${item.n}</h4>
-                        <p class="text-[#fbbf24] text-[9px] mt-1">تاريخ الإنشاء: ${item.created_at}</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button onclick="viewHistoryItem(${index})" class="bg-[#334155] p-2 rounded text-[#fbbf24] hover:bg-[#fbbf24] hover:text-[#0f172a] transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </button>
-                        <button onclick="deleteHistoryItem(${index})" class="bg-[#334155] p-2 rounded text-red-400 hover:bg-red-500 hover:text-white transition">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2
+        function hideHistoryView() { document.getElementById('history-view').classList.add('hidden'); document.getElementById('generator-view').classList.remove('hidden'); }
+    </script>
+</body>
+</html>
